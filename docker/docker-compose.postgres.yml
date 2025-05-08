@@ -14,36 +14,48 @@
 # limitations under the License.
 #
 
-version: '3.0'
+version: '3.8'
 
 services:
   postgres:
     restart: always
     image: "postgres:16"
     ports:
-    - "5432"
+      - "5432:5432"
     environment:
-      POSTGRES_DB: thingsboard
-      POSTGRES_PASSWORD: Bamakolimo76
+      POSTGRES_DB: ${POSTGRES_DB:-thingsboard}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-Bamakolimo76}
     volumes:
       - "thingsboard_pgdata:/var/lib/postgresql/data"
+
   tb-core1:
     env_file:
       - tb-node.postgres.env
     depends_on:
       - postgres
+    volumes:
+      - "thingsboard_logs:/var/log/thingsboard"
+
   tb-core2:
     env_file:
       - tb-node.postgres.env
     depends_on:
       - postgres
+    volumes:
+      - "thingsboard_logs:/var/log/thingsboard"
+
   tb-rule-engine1:
     env_file:
       - tb-node.postgres.env
     depends_on:
       - postgres
+
   tb-rule-engine2:
     env_file:
       - tb-node.postgres.env
     depends_on:
       - postgres
+
+volumes:
+  thingsboard_pgdata:
+  thingsboard_logs:

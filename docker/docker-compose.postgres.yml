@@ -12,37 +12,16 @@ services:
     volumes:
       - "thingsboard_pgdata:/var/lib/postgresql/data"
 
-  tb-core1:
-    image: thingsboard/tb-core:latest
+  tb-core:
+    image: thingsboard/tb:latest
     env_file:
       - tb-node.postgres.env
     depends_on:
       - postgres
     volumes:
       - "thingsboard_logs:/var/log/thingsboard"
-
-  tb-core2:
-    image: thingsboard/tb-core:latest 
-    env_file:
-      - tb-node.postgres.env
-    depends_on:
-      - postgres
-    volumes:
-      - "thingsboard_logs:/var/log/thingsboard"
-
-  tb-rule-engine1:
-    image: thingsboard/tb-rule-engine:latest
-    env_file:
-      - tb-node.postgres.env
-    depends_on:
-      - postgres
-
-  tb-rule-engine2:
-    image: thingsboard/tb-rule-engine:latest
-    env_file:
-      - tb-node.postgres.env
-    depends_on:
-      - postgres
+    ports:
+      - "8080:9090"
 
 volumes:
   thingsboard_pgdata:

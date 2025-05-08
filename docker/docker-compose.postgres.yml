@@ -16,7 +16,7 @@ services:
     image: thingsboard/tb:latest
     restart: always
     ports:
-      - "18080:9090"  # Changez 18080 si le port est occupé
+      - "18080:8080"  # Redirige le port 18080 de l'hôte vers 8080 dans le conteneur
     env_file:
       - tb-node.postgres.env
     depends_on:
@@ -24,8 +24,8 @@ services:
     volumes:
       - "thingsboard_logs:/var/log/thingsboard"
     environment:
-      TB_QUEUE_TYPE=in-memory  # Option minimaliste pour démarrer
-      SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/thingsboard
+      TB_QUEUE_TYPE: in-memory  # Option minimaliste pour démarrer
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/thingsboard
 
 volumes:
   thingsboard_pgdata:

@@ -5,7 +5,7 @@ services:
     image: postgres:16
     restart: always
     ports:
-      - "5432:5432"
+      - "8080:9090"
     environment:
       POSTGRES_DB: ${POSTGRES_DB:-thingsboard}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-Bamakolimo76}

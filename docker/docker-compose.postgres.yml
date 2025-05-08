@@ -7,25 +7,29 @@ services:
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_DB: ${POSTGRES_DB:-thingsboard}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-Bamakolimo76}
+      POSTGRES_DB: thingsboard
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Bamakolimo76
     volumes:
-      - "thingsboard_pgdata:/var/lib/postgresql/data"
+      - thingsboard_pgdata:/var/lib/postgresql/data
 
   thingsboard:
-    image: thingsboard/tb:latest
+    image: thingsboard/tb-postgres
     restart: always
     ports:
-      - "18080:8080"  # Redirige le port 18080 de l'hôte vers 8080 dans le conteneur
-    env_file:
-      - tb-node.postgres.env
+      - "18080:8080"
     depends_on:
       - postgres
-    volumes:
-      - "thingsboard_logs:/var/log/thingsboard"
     environment:
-      TB_QUEUE_TYPE: in-memory  # Option minimaliste pour démarrer
+      TB_QUEUE_TYPE: in-memory
+      DATABASE_TS_TYPE: sql
+      DATABASE_TS_SQL_PROVIDER: postgres
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/thingsboard
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: Bamakolimo76
+      SPRING_PROFILES_ACTIVE: postgres
+    volumes:
+      - thingsboard_logs:/var/log/thingsboard
 
 volumes:
   thingsboard_pgdata:

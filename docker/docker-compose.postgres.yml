@@ -5,23 +5,27 @@ services:
     image: postgres:16
     restart: always
     ports:
-      -"18080:9090"
+      - "5432:5432"
     environment:
       POSTGRES_DB: ${POSTGRES_DB:-thingsboard}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-Bamakolimo76}
     volumes:
       - "thingsboard_pgdata:/var/lib/postgresql/data"
 
-  tb-core:
+  thingsboard:
     image: thingsboard/tb:latest
+    restart: always
+    ports:
+      - "18080:9090"  # Changez 18080 si le port est occupé
     env_file:
       - tb-node.postgres.env
     depends_on:
       - postgres
     volumes:
       - "thingsboard_logs:/var/log/thingsboard"
-    ports:
-      - "8080:9090"
+    environment:
+      TB_QUEUE_TYPE=in-memory  # Option minimaliste pour démarrer
+      SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/thingsboard
 
 volumes:
   thingsboard_pgdata:
